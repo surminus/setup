@@ -6,19 +6,18 @@ echo "Installing Homebrew"
 
 # Setup Shell
 echo "Setting up Shell"
-brew install git
-brew install wget
-brew install zsh
+brew install git wget zsh
 sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
 
 echo "Creating dotfiles"
-git clone git@github.com:surminus/dotfiles.git ~/.dotfiles
+git clone https://github.com:surminus/dotfiles.git ~/.dotfiles
 ~/.dotfiles/bin/setup install
 
 echo "Setting up Vim"
 brew install vim --with-luajit
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-vim +PluginInstall +qall
 
 # Create my development environment
 mkdir ~/surminus
@@ -27,18 +26,25 @@ mkdir ~/surminus
 git clone https://github.com/surminus/aws-tools ~/surminus/aws-tools
 ln -s ~/surminus/aws-tools/awsexport /usr/local/bin/awsexport
 
-echo "Download Chrome"
-open https://www.google.com/intl/en/chrome/
+echo "Installing GPG stuff"
+brew install gpg2 gpg-agent pinentry-mac
+brew install caskroom/cask/gpg-suite
+echo "pinentry-program /usr/local/bin/pinentry-mac" >> ~/.gnupg/gpg-agent.conf
+echo "use-standard-socket" >> ~/.gnupg/gpg-agent.conf
 
 # Setup my passwords
-echo "Installing pass"
-brew install pass
+echo "Installing pass and password generator"
+brew install pass pwgen
+
+echo "Download Chrome"
+open https://www.google.com/intl/en/chrome/
 
 cat << EOF
   You will need to do the following before we can really get going:
   1. Install your GPG key
   2. Log into Github
-  3. Add your SSH key to your Github account.
+  3. Generate an SSH key: ssh-keygen -b 4096
+  4. Add your SSH key to your Github account.
 
   Use your flash drive to complete these steps.
 
@@ -48,8 +54,12 @@ cat << EOF
 
   When this is complete, you should almost be set!
 
+  Remember to install vim plugins:
+  vim +PluginInstall +qall
+
   Useful links to follow:
 
   Slack: https://slack.com/downloads/osx
   Docker: https://docs.docker.com/docker-for-mac/install/
+  iTerm2: https://www.iterm2.com/downloads.html
 EOF
