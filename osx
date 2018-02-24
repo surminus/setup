@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# This configures OSX specific features
+set -e
+
+# Set Dock preferences, assuming dependencies have been installed
+mv ~/Library/Preferences/com.apple.dock.plist ~/Library/Preferences/com.apple.dock.plist.backup-$(date +%F)
+ln -s ~/.dotfiles/com.apple.dock.plist ~/Library/Preferences/com.apple.dock.plist
+
+# Set dock size
+defaults write com.apple.dock tilesize -int 35
+
+# Set autohide time delay
+defaults write com.apple.dock autohide-time-modifier -float 1
+
+# restart dock
+killall Dock
